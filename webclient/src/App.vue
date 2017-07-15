@@ -1,43 +1,72 @@
 <template>
   <div id="app">
+      {{msg}}
       <notsupported v-show="tab==='notsupported'"></notsupported>
-      <calibrate v-show="tab==='calibrate'" :position="position" @calibrated="calibrated($event)" ></calibrate>
-      <play v-show="tab==='play'" :calibration="calibration" :position="position"></play>
+      <calibrate v-show="tab==='calibrate'" :gravity="gravity" @calibrated="calibrated($event)" ></calibrate>
+      <play  v-show="tab==='play'" :calibration="calibration" :gravity="gravity"></play>
   </div>
 </template>
 
 <script>
+    import mpu from './mpu.js'
+
     export default {
+
         name: 'app',
+
         data () {
             return {
                 tab: '',
                 calibration: {},
-                position: {}
+                gravity: {},
+                msg: '',
+                currentOrientation: 0,
+                lastOrientation: 0,
+                gravityResolution: 10
             }
         },
+
         methods: {
             calibrated: function(ev) {
                 this.calibration = ev.calibration;
                 this.tab = 'play';
             }
         },
-        mounted: function() {
-            console.log(this.tab);
-            if (!this.$parent.$options.mpu.hasMPU()) {
+
+        mounted () {
+            if (!mpu.hasMPU()) {
                 this.tab = 'notsupported';
                 return;
             }
             this.tab = 'calibrate';
-            this.position.x = '0';
-            
+
+            /* doesn't react for some reason
+            window.addEventListener('orientationchange', function() {
+                this.msg = "change!";
+            });
+            */
+
+            this.lastOrientation = window.orientation;
+            this.currentOrientation = window.currentOrientation;
+
             window.ondevicemotion = e => {
-                console.log("ondevicemotion", this);
-                const ax = e.acceleration.x;
-        		const ay = e.acceleration.y;
-    		    this.position.x = e.accelerationIncludingGravity.x - ax;
-	            this.position.y = e.accelerationIncludingGravity.y - ay;
-                console.log(this.position);
+                if (this.currentOrientation != window.orientation) {
+                    this.lastOrientation = this.currentOrientation;
+                    this.currentOrientation = window.orientation;
+                    // TODO change calibrationdata
+                    // TODO notify calibrate
+                }
+
+                const x = Math.round(this.gravityResolution *
+                    (e.accelerationIncludingGravity.x - e.acceleration.x)) /
+                    this.gravityResolution;
+                const y = Math.round(this.gravityResolution *
+                    (e.accelerationIncludingGravity.y - e.acceleration.y)) /
+                     this.gravityResolution;
+                     
+                if (x != this.gravity.x || y != this.gravity.y) {
+                    this.gravity = {x, y};
+                }
             }
         }
   }

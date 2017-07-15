@@ -6,7 +6,6 @@ import calibrate from './calibrate.vue';
 import play from './play.vue';
 import notsupported from './notsupported.vue';
 
-import mpu from './mpu.js'
 
 Vue.component('welcome', welcome);
 Vue.component('calibrate', calibrate);
@@ -15,6 +14,5 @@ Vue.component('notsupported', notsupported);
 
 new Vue({
   el: '#app',
-  render: h => h(App),
-  mpu
+  render: h => h(App)
 });
