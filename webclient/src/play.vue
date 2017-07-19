@@ -8,13 +8,10 @@
     export default {
         name: 'play',
 
-        props: ['calibration', 'gravity'],
+        props: ['calibration', 'gravity', 'comms'],
 
         data: function() {
             return {
-                a: 0,
-                b: 0,
-                c: 0,
                 msg: ''
             }
         },
@@ -30,19 +27,32 @@
 
         watch: {
             x: function () {
-                this.msg += 'x';
+                this.comms.x(this.x);
+                // this.msg += 'x';
             },
             y: function() {
-                this.msg += 'y';
+                this.comms.y(this.y);
+                // this.msg += 'y';
+            },
+            client_id: function() {
+                console.log('watching ID', this.id)
+                this.msg += "ID = " + this.id;
             }
         },
 
         methods: {
             normalise: function(val, minval, maxval) {
                 const to_zero = Math.max(val - minval, 0);
-                const normalised =Math.min (1,  to_zero / (maxval - minval));
-                return Math.round(normalised * 127);
+                return Math.min (1,  to_zero / (maxval - minval));
             }
+        },
+
+        mounted: function () {
+            var that = this;
+            this.comms.getID(function(id) {
+                console.log('setting id to ', id);
+                that.client_id = id;
+            });
         }
 
     }

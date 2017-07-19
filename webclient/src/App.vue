@@ -3,7 +3,7 @@
       {{msg}}
       <notsupported v-show="tab==='notsupported'"></notsupported>
       <calibrate v-show="tab==='calibrate'" :gravity="gravity" @calibrated="calibrated($event)" ></calibrate>
-      <play  v-show="tab==='play'" :calibration="calibration" :gravity="gravity"></play>
+      <play  v-show="tab==='play'" :calibration="calibration" :comms="comms" :gravity="gravity"></play>
   </div>
 </template>
 
@@ -13,6 +13,8 @@
     export default {
 
         name: 'app',
+
+        props: ['comms'],
 
         data () {
             return {
@@ -34,6 +36,8 @@
         },
 
         mounted () {
+
+            console.log('comms:', this.comms);
             if (!mpu.hasMPU()) {
                 this.tab = 'notsupported';
                 return;
@@ -63,7 +67,7 @@
                 const y = Math.round(this.gravityResolution *
                     (e.accelerationIncludingGravity.y - e.acceleration.y)) /
                      this.gravityResolution;
-                     
+
                 if (x != this.gravity.x || y != this.gravity.y) {
                     this.gravity = {x, y};
                 }
