@@ -1,18 +1,19 @@
 <template>
     <div>
         <h2>Play</h2>
-        {{x}}, {{y}}
+        {{x | round}}, {{y | round}}
     </div>
 </template>
 <script>
     export default {
         name: 'play',
 
-        props: ['calibration', 'gravity', 'comms'],
+        props: ['calibration', 'gravity', 'comms', 'active'],
 
         data: function() {
             return {
-                msg: ''
+                msg: '',
+                id: null
             }
         },
 
@@ -27,16 +28,19 @@
 
         watch: {
             x: function () {
-                this.comms.x(this.x);
-                // this.msg += 'x';
+                this.comms.x(1.0 - this.x, this.client_id);
             },
             y: function() {
-                this.comms.y(this.y);
-                // this.msg += 'y';
+                this.comms.y(this.y, this.client_id);
             },
             client_id: function() {
-                console.log('watching ID', this.id)
                 this.msg += "ID = " + this.id;
+            },
+            active: function() {
+                console.log("active change");
+                if (this.id === null) {
+                    this.register();
+                }
             }
         },
 
@@ -44,16 +48,14 @@
             normalise: function(val, minval, maxval) {
                 const to_zero = Math.max(val - minval, 0);
                 return Math.min (1,  to_zero / (maxval - minval));
+            },
+            register: function() {
+                var that = this;
+                this.comms.getID(function(id) {
+                    console.log('setting id to ', id);
+                    that.client_id = id;
+                });
             }
-        },
-
-        mounted: function () {
-            var that = this;
-            this.comms.getID(function(id) {
-                console.log('setting id to ', id);
-                that.client_id = id;
-            });
         }
-
     }
 </script>

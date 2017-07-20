@@ -10,16 +10,13 @@
 <script>
     export default {
         name: 'calibrate',
-
         props: ["gravity"],
-
         computed: {
             nonzerodifference: function() {
                 return this.calibrationdata.maxx != this.calibrationdata.minx &&
                     this.calibrationdata.maxy != this.calibrationdata.miny;
             }
         },
-
         watch: {
             gravity () {
                 this.calibrationdata = {
@@ -30,24 +27,20 @@
                 };
             }
         },
-
         data() {
             return {
                 calibrationdata: {
-                    minx: 100,
-                    maxx: -100,
-                    miny: 100,
-                    maxy: -100
+                    minx: 360,
+                    maxx: 0,
+                    miny: 360,
+                    maxy: 0
                 }
             }
         },
-
         methods: {
             play: function () {
                 this.$emit("calibrated", {calibration: this.calibrationdata});
             }
         }
-
     }
-
 </script>
