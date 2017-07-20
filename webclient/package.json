@@ -5,10 +5,11 @@
   "author": "Nicolas Neubauer <nicolas.neubauer@here.com>",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot  --public 192.168.2.107:3000 --port 3000 --host 0.0.0.0",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot  --public 192.168.2.107:5000 --port 5000 --host 0.0.0.0",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "lodash": "^4.17.4",
     "vue": "^2.3.3"
   },
   "devDependencies": {

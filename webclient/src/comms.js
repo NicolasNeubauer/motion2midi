@@ -23,11 +23,13 @@ export default {
     },
 
     x: function(value, client_id) {
-        this.sendOrientation('x', value, client_id);
+        const that = this;
+        _.debounce(() => that.sendOrientation('x', value, client_id), 100);
     },
 
     y: function(value, client_id) {
-        this.sendOrientation('y', value, client_id);
+        const that = this;
+        _.debounce(() => that.sendOrientation('y', value, client_id), 100);
     },
 
     getID: function(callback) {

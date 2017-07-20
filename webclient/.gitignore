@@ -3,6 +3,11 @@ node_modules/
 dist/
 npm-debug.log
 yarn-error.log
+host/tests/builds/*
+npm-debug.*.log
+!.gitkeep
+_book
+thumbs.db
 
 # Editor directories and files
 .idea
