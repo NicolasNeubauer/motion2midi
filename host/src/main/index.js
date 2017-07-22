@@ -23,7 +23,6 @@ function startExpress() {
         next();
     });
     expressApp.get('/', (req, res) => {
-        // debugger;
         res.send('Hello, World!');
         mainWindow.send('accessed', 'hello, world');
     });
@@ -31,34 +30,15 @@ function startExpress() {
         console.log('Example app listening on port 3000!');
     });
 
-    expressApp.get('/orientation/:channel/:value/:client_id', (req, res) => {
+    expressApp.get('/orientation/:channel/:value/:clientId', (req, res) => {
         res.send('');
-        mainWindow.send('midi', req.params);
+        console.log('received ', req.params);
+        mainWindow.send('midi_fader', req.params);
     });
-
-    /*
-    @app.route("/orientation/<string:channel>/<int:value>/<int:client_id>")
-    @crossdomain(origin='*')
-    def get_orientation(channel, value, client_id):
-        if not (channel, client_id) in last_faders:
-            last_faders[(channel, client_id)] = None
-        if last_faders[(channel, client_id)] != value:
-            if value > 127 or value < 0:
-                raise Exception("value must be between 0 and 127, is %d" % value)
-            if value == 127:
-                value = 126 # weird mido error message when value = 127
-
-            send_fader(value, get_control(channel, client_id))
-            last_faders[(channel, client_id)] = value
-        return ""
-        */
 }
 
 
 function createWindow() {
-  /**
-   * Initial window options
-   */
     mainWindow = new BrowserWindow({
         height: 563,
         useContentSize: true,

@@ -1,10 +1,13 @@
+import _ from 'lodash';
+
 export default {
 
-    baseUrl: '192.168.2.107:5000',
+    baseUrl: '192.168.2.107:3000',
 
     lastValues: {},
 
     sendOrientation: function(name, value, client_id) {
+        console.log('sendOrientation', name, value, client_id);
         if (!client_id) {
             return;
         }
@@ -24,12 +27,15 @@ export default {
 
     x: function(value, client_id) {
         const that = this;
-        _.debounce(() => that.sendOrientation('x', value, client_id), 100);
+        console.log('before debounce');
+        //_.debounce(() => that.sendOrientation('x', value, client_id), 100);
+        that.sendOrientation('x', value, client_id);
     },
 
     y: function(value, client_id) {
         const that = this;
-        _.debounce(() => that.sendOrientation('y', value, client_id), 100);
+        // _.debounce(() => that.sendOrientation('y', value, client_id), 100);
+        that.sendOrientation('y', value, client_id)
     },
 
     getID: function(callback) {
