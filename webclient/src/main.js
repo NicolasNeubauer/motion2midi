@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueResource from 'vue-resource'
 import App from './App.vue'
 
 import welcome from './welcome.vue'
@@ -9,12 +10,16 @@ import { listenToOrientation } from './mpu.js'
 import comms from './comms.js';
 
 
+Vue.use(VueResource);
 Vue.component('welcome', welcome);
 Vue.component('calibrate', calibrate);
 Vue.component('play', play);
 Vue.component('notsupported', notsupported);
 
 Vue.filter('round', value => Math.round(value * 100) / 100);
+
+
+
 
 window.mainApp = new Vue({
   el: '#app',

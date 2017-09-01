@@ -54,7 +54,8 @@
                 this.comms.getID(function(id) {
                     console.log('setting id to ', id);
                     that.client_id = id;
-                });
+                },
+                that.$http);
             }
         }
     }

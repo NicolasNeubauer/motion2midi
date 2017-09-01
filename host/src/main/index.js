@@ -14,6 +14,13 @@ const winURL = process.env.NODE_ENV === 'development'
   : `file://${__dirname}/index.html`;
 
 
+let id = 0;
+function nextId() {
+    id += 1;
+    return id;
+}
+
+
 function startExpress() {
     const express = require('express');
     const expressApp = express();
@@ -34,6 +41,10 @@ function startExpress() {
         res.send('');
         console.log('received ', req.params);
         mainWindow.send('midi_fader', req.params);
+    });
+
+    expressApp.get('/register', (req, res) => {
+        res.send(`{"id":${nextId()}}`);
     });
 }
 

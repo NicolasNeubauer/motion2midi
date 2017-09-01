@@ -8,7 +8,6 @@ import { ipcRenderer } from 'electron'; // native electron module remote,
 import App from './App';
 import router from './router';
 import store from './store';
-// const { ipcRenderer } = require('electron')
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'));
 Vue.http = Vue.prototype.$http = axios;

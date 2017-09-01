@@ -1,8 +1,10 @@
 import _ from 'lodash';
 
+const baseUrl = '192.168.2.108:3000';
+
 export default {
 
-    baseUrl: '192.168.2.107:3000',
+    baseUrl,
 
     lastValues: {},
 
@@ -27,7 +29,6 @@ export default {
 
     x: function(value, client_id) {
         const that = this;
-        console.log('before debounce');
         //_.debounce(() => that.sendOrientation('x', value, client_id), 100);
         that.sendOrientation('x', value, client_id);
     },
@@ -38,24 +39,14 @@ export default {
         that.sendOrientation('y', value, client_id)
     },
 
-    getID: function(callback) {
-          window.mainApp.msg = "getting id";
-          callback(1);
-          return;
-      $.ajax({
-        url: 'http://192.168.2.107:3000/id.json',
-        method: 'GET'
-      }).then(function (response) {
-        if(response.error) {
-          console.err("There was an error getting the client id:" + response.error);
-          window.mainApp.msg = response.error;
-        } else {
-              window.mainApp.msg = "ID: " + response.id;
-          callback(response.id);
-        }
-      }).catch(function (err) {
-          window.mainApp.msg = response.error;
-        console.error(err);
-      });
+    getID: function(callback, $http) {
+        window.mainApp.msg = "getting id";
+        const url = `http://${baseUrl}/register`;
+        $http.get(url, {}).then(
+            (response) => callback(response.body.id),
+            (response) => {
+                console.err("There was an error getting the client id:" + response.statusText);
+                window.mainApp.msg = response.statusText;
+        });
     }
 }
