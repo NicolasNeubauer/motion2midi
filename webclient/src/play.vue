@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Play</h2>
+        <h2>Play | client id {{ client_id }}</h2>
         {{x | round}}, {{y | round}}
     </div>
 </template>
@@ -13,7 +13,7 @@
         data: function() {
             return {
                 msg: '',
-                id: null
+                client_id: null
             }
         },
 
@@ -34,11 +34,11 @@
                 this.comms.y(this.y, this.client_id);
             },
             client_id: function() {
-                this.msg += "ID = " + this.id;
+                this.msg += "ID = " + this.client_id;
             },
             active: function() {
                 console.log("active change");
-                if (this.id === null) {
+                if (this.client_id === null) {
                     this.register();
                 }
             }

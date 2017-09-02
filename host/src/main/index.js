@@ -1,4 +1,11 @@
-import { app, BrowserWindow } from 'electron' // eslint-disable-line
+import { app, BrowserWindow, ipcMain } from 'electron' // eslint-disable-line
+import IDGenerator from 'id-gen';
+
+
+const generator = new IDGenerator();
+generator.create('response');
+const responses = {};
+
 
 /**
  * Set `__static` path to static files in production
@@ -12,14 +19,6 @@ let mainWindow;
 const winURL = process.env.NODE_ENV === 'development'
   ? 'http://localhost:9080'
   : `file://${__dirname}/index.html`;
-
-
-let id = 0;
-function nextId() {
-    id += 1;
-    return id;
-}
-
 
 function startExpress() {
     const express = require('express');
@@ -44,10 +43,18 @@ function startExpress() {
     });
 
     expressApp.get('/register', (req, res) => {
-        res.send(`{"id":${nextId()}}`);
+        const responseId = generator.next('response');
+        // can't send callback function through IPC, so storing response for later retrieval
+        responses[responseId] = res;
+        mainWindow.send('register', { req, responseId });
     });
 }
 
+ipcMain.on('sendId', (event, { responseId, clientId }) => {
+    console.log('get sendId', responseId, clientId);
+    responses[responseId].send(`{"id":"${clientId}"}`);
+    responses[responseId] = null;
+});
 
 function createWindow() {
     mainWindow = new BrowserWindow({

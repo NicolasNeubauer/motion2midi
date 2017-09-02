@@ -40,7 +40,6 @@ export default {
     },
 
     getID: function(callback, $http) {
-        window.mainApp.msg = "getting id";
         const url = `http://${baseUrl}/register`;
         $http.get(url, {}).then(
             (response) => callback(response.body.id),

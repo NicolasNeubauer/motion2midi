@@ -81,3 +81,12 @@ ipcRenderer.on('midi_fader', (event, arg) => {
     }
     console.log(event, arg);
 });
+
+ipcRenderer.on('register', (event, { req, responseId }) => {
+    console.log(req, responseId);
+    store.dispatch('newClient', {
+        req,
+        callback: client =>
+            ipcRenderer.send('sendId', { responseId, clientId: client.id }),
+    });
+});
