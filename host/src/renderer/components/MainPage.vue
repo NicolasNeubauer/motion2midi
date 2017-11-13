@@ -18,10 +18,10 @@
         name: 'main-page',
         components: {},
         methods: {},
-        computed: {...mapGetters([
-            'clients'
-        ])}
-    }
+        computed: { ...mapGetters([
+            'clients',
+        ]) },
+    };
 </script>
 
 <style>

@@ -28,8 +28,10 @@ const Midi = {
                 break;
             }
         }
+
         if (!success) {
-            console.error(`did not find MIDI channel with name starting with ${name}`);
+            // console.error(`did not find MIDI channel with name starting with ${name}`);
+            this.output.openVirtualPort(name);
         }
     },
 
